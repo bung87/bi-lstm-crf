@@ -1,0 +1,1 @@
+{"vocab_size": 6864, "chunk_size": 259, "embed_dim": 300, "bi_lstm_units": 256, "max_num_words": 20000, "dropout_rate": 0.1}

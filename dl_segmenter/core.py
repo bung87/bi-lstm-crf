@@ -160,6 +160,23 @@ class DLSegmenter:
 
         return ret
 
+    def decode_text(self, text, noun_conjoin=True):
+        texts = [text]
+        sents = []
+        with ThreadPoolExecutor() as executor:
+            for text in executor.map(lambda x: list(re.subn("\s+", "", x)[0]), texts):
+                sents.append(text)
+        sequences = self.src_tokenizer.texts_to_sequences(sents)
+        tags = self.decode_sequences(sequences)
+
+        ret = []
+        with ThreadPoolExecutor() as executor:
+            for cur_sent, cur_tag in executor.map(lambda x: self._single_decode(x, noun_conjoin),
+                                                  zip(sents, tags)):
+                ret.append((cur_sent, cur_tag))
+
+        return ret[0]
+
     def _seq_to_matrix(self, sequences):
         max_len = len(max(sequences, key=len))
         return pad_sequences(sequences, maxlen=max_len, padding="post")

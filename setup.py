@@ -16,12 +16,12 @@ setup(name='dl_segmenter',
 
       packages=find_packages(exclude=['tests', 'examples']),
 
-      package_data={'dl_segmenter': ['*.*', 'checkpoints/*', 'config/*']},
+      package_data={'dl_segmenter': ['*.*', 'models/*', 'config/*']},
 
       long_description=open('README.md', encoding="utf-8").read(),
 
       zip_safe=False,
 
-      install_requires=['keras', 'keras-contrib'],
+      install_requires=['keras', 'keras-contrib','tensorflow'],
 
       )

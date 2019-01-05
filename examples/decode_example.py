@@ -2,11 +2,15 @@ import time
 
 from dl_segmenter import get_or_create, DLSegmenter
 
+import os
+
+DIR_PATH = os.path.join(os.path.dirname(__file__))
+
 if __name__ == '__main__':
-    segmenter: DLSegmenter = get_or_create("../data/default-config.json",
-                                           src_dict_path="../data/src_dict.json",
-                                           tgt_dict_path="../data/tgt_dict.json",
-                                           weights_path="../models/weights.01-0.15.h5")
+    segmenter = get_or_create(os.path.join(DIR_PATH,"../config/default-config.json"),
+                                           src_dict_path=os.path.join(DIR_PATH,"../config/src_dict.json"),
+                                           tgt_dict_path=os.path.join(DIR_PATH,"../config/tgt_dict.json"),
+                                           weights_path=os.path.join(DIR_PATH,"../models/weights.32--0.18.h5"))
 
     texts = [
         "昨晚，英国首相特里萨•梅(TheresaMay)试图挽救其退欧协议的努力，在布鲁塞尔遭遇了严重麻烦。"
@@ -30,12 +34,12 @@ if __name__ == '__main__':
         "人民网北京1月2日电据中央纪委监察部网站消息，日前，经中共中央批准，"
         "中共中央纪委对湖南省政协原副主席童名谦严重违纪违法问题进行了立案检查。"
     ]
+    sent, tag = segmenter.decode_text(texts[0])
 
-    for _ in range(1):
-        start_time = time.time()
-        for sent, tag in segmenter.decode_texts(texts):
-            print(sent)
-            print(tag)
-            # for s, t in zip(sent, tag):
-            #     print(s, t)
-        print(f"cost {(time.time() - start_time) * 1000}ms")
+    start_time = time.time()
+        
+    for sent, tag in segmenter.decode_texts(texts):
+        print(sent)
+        print(tag)
+        
+    print("cost {:.2f}ms".format( (time.time() - start_time )* 1000) )
