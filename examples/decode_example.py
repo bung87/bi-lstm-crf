@@ -1,9 +1,9 @@
 import time
-
+import datetime
 from dl_segmenter import get_or_create, DLSegmenter
-
+import random
 import os
-
+# wget https://raw.githubusercontent.com/yanyiwu/practice/master/nodejs/nodejieba/performance/weicheng.utf8 -O examples/weicheng.utf8
 DIR_PATH = os.path.join(os.path.dirname(__file__))
 
 if __name__ == '__main__':
@@ -41,5 +41,27 @@ if __name__ == '__main__':
     for sent, tag in segmenter.decode_texts(texts):
         print(sent)
         print(tag)
-        
+
     print("cost {:.2f}ms".format( (time.time() - start_time )* 1000) )
+
+    lines = []
+    weicheng = os.path.join(os.path.dirname(__file__),"weicheng.utf8")
+    for line in open(weicheng):
+        a = line.strip()
+        if a:
+            lines.append(a)
+    result = [""] * 10
+    result[random.randint(0, 9)] = '/'.join(str(segmenter.decode_text("南京长江大桥")))
+    starttime = datetime.datetime.now()
+    segmenter.decode_texts(lines)
+    # for i in range(50):
+    # for line in lines:
+    #     try:
+    #         r = '/'.join(str(segmenter.decode_text(line)))
+    #     except:
+    #         pass
+    #     # print(r)
+    #     result[random.randint(0, 9)] = r
+    #     #result[random.randint(0, 9)] = jieba.cut(line)
+    endtime = datetime.datetime.now()
+    print (endtime - starttime)
